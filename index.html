@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+    <!-- <div style="height:10px; background-color: black; border-radius:100px"></div> -->
+    
+    <div class="btn-container">
+        <input type="text" placeholder="Speed (ms)" id="speed" style="border-radius: 4px; padding:10px; margin:4px;">
+        <button class="btn" style="margin-right: 20px;" onclick="set_speed()">Set Speed</button>
+        <button class="btn" onclick="generate_new_array()">Generate New Array</button>
+        <button class="btn" onclick="bubble_sort(b,n)">Bubble Sort</button>
+        <button class="btn" onclick="insertion_sort(b,n)">Insertion Sort</button>
+        <button class="btn" onclick="selection_sort(b,n)">Selection Sort</button>
+        <button class="btn" onclick="merge_sort(b,0,n-1)">Merge Sort</button>
+        <button class="btn" onclick="quick_sort(b,n)">Quick Sort</button>
+        <!-- <button class="btn" onclick="heap_sort(b,n)">Heap Sort</button> -->
+        <button class="btn" onclick="stop()">Stop</button>
+    </div>
+    
+    
+    <div id="main-container"></div>
+
+    <!-- <div style="height:10px; background-color: black; border-radius:100px"></div> -->
+
+<script src="sorter.js"></script>
+</body>
+</html>
