@@ -119,78 +119,91 @@ async function insertion_sort(a,n){
 
 ///////// MERGE SORT //////////
 
-async function merge_sort(a,l,r){
+function merge_sort(a,l,r){
     stopping_condition = false;
-    await _merge_sort(a,l,r);
-}
+    
 
-async function _merge_sort(a,l, r){
-    if (l >= r) return; 
-    var n = r-l+1;
-    var m = Math.floor(n/2);
-    await _merge_sort(a,l, l+m-1);
-    await _merge_sort(a,l+m, r);
-    await sleep(100);
-    await merge(a,l,l+m-1,l+m,r);
-}
-
-async function merge(a,l1,r1,l2,r2){
-    var n = r1-l1+1;
-    var m = r2-l2+1;
-    var i = l1;
-    var j = l2;
-    var k = []
-    var childs = main_container.children;
-    childs[l1].style.backgroundColor = "red";
-    childs[l2].style.backgroundColor = "red";
-    var x = l1;
-    while (i<=r1 && j<=r2 && stopping_condition==false){
-        if (a[i]<a[j]){
+    async function _merge_sort(a,l, r){
+        if (l >= r) return; 
+        var n = r-l+1;
+        var m = Math.floor(n/2);
+        await _merge_sort(a,l, l+m-1);
+        if (stopping_condition==true) return;
+        await _merge_sort(a,l+m, r);
+        if (stopping_condition==true) return;
+        await sleep(100);
+        await merge(a,l,l+m-1,l+m,r);
+        if (stopping_condition==true) return;
+    }
+    
+    async function merge(a,l1,r1,l2,r2){
+        var n = r1-l1+1;
+        var m = r2-l2+1;
+        var i = l1;
+        var j = l2;
+        var k = []
+        var childs = main_container.children;
+        childs[l1].style.backgroundColor = "red";
+        childs[l2].style.backgroundColor = "red";
+        var x = l1;
+        while (i<=r1 && j<=r2 && stopping_condition==false){
+            if (a[i]<a[j]){
+                k.push(a[i]);
+                childs[i].style.backgroundColor = "green";
+                childs[i+1].style.backgroundColor = "red";
+                childs[x].style.height = childs[i].style.height;
+                x++;
+                i++;
+            }
+            else{
+                k.push(a[j]);
+                childs[j].style.backgroundColor = "green";
+                if (j+1<=r2) childs[j+1].style.backgroundColor = "red";
+                childs[x].style.height = childs[j].style.height;
+                x++;
+                j++;    
+            }
+            await sleep(sorting_speed);
+            if (stopping_condition==true) return;
+        }
+        while (i<=r1 && stopping_condition==false){
             k.push(a[i]);
             childs[i].style.backgroundColor = "green";
             childs[i+1].style.backgroundColor = "red";
             childs[x].style.height = childs[i].style.height;
-            x++;
+            x++ ;
             i++;
+            await sleep(sorting_speed);
+            if (stopping_condition==true) return;
         }
-        else{
+        while (j<=r2 && stopping_condition==false){
             k.push(a[j]);
             childs[j].style.backgroundColor = "green";
             if (j+1<=r2) childs[j+1].style.backgroundColor = "red";
             childs[x].style.height = childs[j].style.height;
             x++;
-            j++;    
+            j++;
+            await sleep(sorting_speed);
+            if (stopping_condition==true) return;
         }
-        await sleep(sorting_speed);
-    }
-    while (i<=r1 && stopping_condition==false){
-        k.push(a[i]);
-        childs[i].style.backgroundColor = "green";
-        childs[i+1].style.backgroundColor = "red";
-        childs[x].style.height = childs[i].style.height;
-        x++ ;
-        i++;
-        await sleep(sorting_speed);
-    }
-    while (j<=r2 && stopping_condition==false){
-        k.push(a[j]);
-        childs[j].style.backgroundColor = "green";
-        if (j+1<=r2) childs[j+1].style.backgroundColor = "red";
-        childs[x].style.height = childs[j].style.height;
-        x++;
-        j++;
-        await sleep(sorting_speed);
-    }
-    for (var i = l1 ; i<=r2 ; i++){
-        a[i] = k[i-l1];
-        childs[i].style.height = (a[i]*10000)+"px";
-        childs[i].style.backgroundColor = "aqua";
-    }
-    for (var i = l1 ; i<=r2 ; i++){
-        childs[i].style.backgroundColor = "aqua";
+        for (var i = l1 ; i<=r2 ; i++){
+            a[i] = k[i-l1];
+            childs[i].style.height = (a[i]*10000)+"px";
+            childs[i].style.backgroundColor = "aqua";
+            if (stopping_condition==true) return;
+        }
+        for (var i = l1 ; i<=r2 ; i++){
+            childs[i].style.backgroundColor = "aqua";
+            if (stopping_condition==true) return;
+        }
+        if (stopping_condition==true) return;
     }
 
+    _merge_sort(a,l,r);
+
 }
+
+
 
 
 /////////// QUICK SORT ///////////
@@ -239,10 +252,11 @@ async function _quick_sort(a,l,r){
             childs[i].style.backgroundColor = "aqua";
             i++ ;
         }
-
+        if (stopping_condition==true) return;
     }
     childs[pivot].style.backgroundColor = "aqua";
     await _quick_sort(a, l, pivot-1);
+    if (stopping_condition==true) return;
     await _quick_sort(a, pivot+1, r);
 }
 
@@ -268,7 +282,7 @@ function max(a,b){
 }
 
 function set_speed(){
-    sorting_speed = max(100,parseInt(document.getElementById("speed").value)) ;
+    sorting_speed = max(10,parseInt(document.getElementById("speed").value)) ;
 }
 
 function generate_new_array(){
